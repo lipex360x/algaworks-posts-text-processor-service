@@ -42,7 +42,6 @@ public class CalculatePostCostService {
   }
 
   private void sendPostToProcessCost(ResultPostCostDTO payload) {
-
     MessagePostProcessor messagePostProcessor = message -> {
       message.getMessageProperties().setHeader("postId", payload.getPostId());
       return message;
