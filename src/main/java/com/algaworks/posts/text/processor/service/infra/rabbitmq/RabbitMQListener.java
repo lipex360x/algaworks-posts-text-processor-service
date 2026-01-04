@@ -1,4 +1,4 @@
-package com.algaworks.posts.text.processor.service.infra.rabbitmq.config;
+package com.algaworks.posts.text.processor.service.infra.rabbitmq;
 
 import com.algaworks.posts.text.processor.service.domain.dto.CalculatePostCostDTO;
 import com.algaworks.posts.text.processor.service.domain.service.CalculatePostCostService;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static com.algaworks.posts.text.processor.service.infra.rabbitmq.config.RabbitMQConfig.QUEUE_POST_PROCESSING;
+import static com.algaworks.posts.text.processor.service.infra.rabbitmq.RabbitMQConfig.QUEUE_POST_PROCESSING;
 
 @Slf4j
 @Component

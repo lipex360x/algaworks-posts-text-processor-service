@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static com.algaworks.posts.text.processor.service.infra.rabbitmq.config.RabbitMQConfig.DIRECT_EXCHANGE_POST_PROCESSING;
-import static com.algaworks.posts.text.processor.service.infra.rabbitmq.config.RabbitMQConfig.ROUTING_KEY_POST_PROCESSING_RESULT;
+import static com.algaworks.posts.text.processor.service.infra.rabbitmq.RabbitMQConfig.DIRECT_EXCHANGE_POST_PROCESSING;
+import static com.algaworks.posts.text.processor.service.infra.rabbitmq.RabbitMQConfig.ROUTING_KEY_POST_PROCESSING_RESULT;
 
 @Slf4j
 @Service
@@ -23,7 +23,6 @@ public class CalculatePostCostService {
   private final RabbitTemplate rabbitTemplate;
 
   public void execute(CalculatePostCostDTO input) {
-    log.info("calculating Post Cost id: {}", input.getPostId());
     Integer wordCount = numberOfWords(input.getPostBody());
     BigDecimal postCost = calculateCost(wordCount);
     ResultPostCostDTO postCostResult = ResultPostCostDTO.builder()
@@ -43,12 +42,13 @@ public class CalculatePostCostService {
   }
 
   private void sendPostToProcessCost(ResultPostCostDTO payload) {
-    log.info("sending Post Cost id {} to queue", payload.getPostId());
+
     MessagePostProcessor messagePostProcessor = message -> {
       message.getMessageProperties().setHeader("postId", payload.getPostId());
       return message;
     };
     rabbitTemplate.convertAndSend(DIRECT_EXCHANGE_POST_PROCESSING, ROUTING_KEY_POST_PROCESSING_RESULT, payload, messagePostProcessor);
+    log.info("Post id {} sent to queue", payload.getPostId());
   }
 
 }

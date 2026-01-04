@@ -1,4 +1,4 @@
-package com.algaworks.posts.text.processor.service.infra.rabbitmq.config;
+package com.algaworks.posts.text.processor.service.infra.rabbitmq;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.Binding;
@@ -21,7 +21,7 @@ public class RabbitMQConfig {
 
   public static final String DIRECT_EXCHANGE_POST_PROCESSING = "text-processor.post-processing.v1.e";
 
-  public static final String DLQ_POST_PROCESSING_RESULT = "text-processor-service.post-processing.v1.dlq";
+  public static final String DLQ_POST_PROCESSING = "text-processor-service.post-processing.v1.dlq";
   public static final String QUEUE_POST_PROCESSING = "text-processor-service.post-processing.v1.q";
   public static final String ROUTING_KEY_POST_PROCESSING = "text-processor-service.post-processing.v1.r";
 
@@ -43,15 +43,15 @@ public class RabbitMQConfig {
   }
 
   @Bean
-  public Queue deadLetterQueuePostProcessingResult() {
-    return QueueBuilder.durable(DLQ_POST_PROCESSING_RESULT).build();
+  public Queue dlqPostProcessingResult() {
+    return QueueBuilder.durable(DLQ_POST_PROCESSING).build();
   }
 
   @Bean
   public Queue queuePostProcessingResult() {
     Map<String, Object> args = new HashMap<>();
     args.put("x-dead-letter-exchange", "");
-    args.put("x-dead-letter-routing-key", DLQ_POST_PROCESSING_RESULT);
+    args.put("x-dead-letter-routing-key", DLQ_POST_PROCESSING);
     return QueueBuilder
       .durable(QUEUE_POST_PROCESSING)
       .withArguments(args)
